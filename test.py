@@ -13,32 +13,45 @@ url = driver.current_url
 driver.get(url)
 target = driver.find_element(By.TAG_NAME,"h5")
 target.find_element(By.XPATH,"..").click()
-url = driver.current_url
-driver.get(url)
-print(url)
 for element in driver.find_elements(By.CLASS_NAME,"a-price-whole"):
   price = int(element.text.replace(",", ""))
   if(price < 4000): 
     target = driver.find_element(By.PARTIAL_LINK_TEXT,"カートに入れる").click()
     time.sleep(3)
-    print(url)
-    # loc = target.location
-    # # print(loc)
-    # x, y = loc['x'], loc['y']
-    # actions = ActionChains(driver)
-    # actions.move_by_offset(x, y)
-    # actions.click()
-    # actions.perform()
-    # url = driver.current_url
-    # driver.switch_to.window(driver.window_handles[0])
-    # target = driver.find_element(By.ID,"pab-declarative-IDMRFYKKHDKIL")
-    # driver.execute_script('return arguments[0].innerText', target)
-    # ActionChains(driver)\
-    #     .click_and_hold(target)\
-    #     .perform()
-    # target = driver.find_element(By.XPATH,'//a[text()="カートに入れる"]')
-    # print(target)
-    exit()
+    break
+driver.find_element(By.ID,"sc-buy-box-ptc-button").click()
+time.sleep(3)
+url = driver.current_url
+mail = "axshot@yahoo.co.jp"
+target = driver.find_element(By.ID,"ap_email").send_keys(mail)
+driver.find_element(By.ID,"continue").click()
+time.sleep(3)
+passWord = "3391sanda"
+target = driver.find_element(By.ID,"ap_password").send_keys(passWord)
+driver.find_element(By.ID,"signInSubmit").click()
+# TODO:ログイン状態が保持されている場合はスリープするとうまくいかないから処理を分ける必要がある
+# time.sleep(3)
+url = driver.current_url
+while url:
+  newUrl = driver.current_url
+  time.sleep(3)
+  if(url != newUrl):
+    time.sleep(3)
+    break
+target = driver.find_element(By.XPATH,"//*[@id='address-list']/div/div[1]/div/fieldset[2]/div[1]/span/div/label/input").click()
+time.sleep(3)
+target = driver.find_element(By.XPATH,"//*[@id='shipToThisAddressButton']/span/input").click()
+time.sleep(10)
+target = driver.find_element(By.XPATH,"//*[@id='orderSummaryPrimaryActionBtn']/span/input").click()
+time.sleep(3)
+lastNumbers ="144"
+# todo: 以下も出る時とでない時があるから分岐させる必要がある
+target = driver.find_element(By.XPATH, "//input[contains(@placeholder,'末尾  0454')]").send_keys(lastNumbers)
+time.sleep(3)
+target = driver.find_element(By.TAG,"//span[contains(@text,'お客様のカードを照合します')]").click()
+time.sleep(3)
+# todo: 確定ボタンを押す処理を書く（テストでも購入してしまうので慎重に）
+
 # response = requests.get(url)
 # soup = BeautifulSoup(response.text, "html.parser")
 
