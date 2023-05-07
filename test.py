@@ -48,8 +48,9 @@ lastNumbers ="144"
 # todo: 以下も出る時とでない時があるから分岐させる必要がある
 target = driver.find_element(By.XPATH, "//input[contains(@placeholder,'末尾  0454')]").send_keys(lastNumbers)
 time.sleep(3)
-target = driver.find_element(By.TAG,"//span[contains(@text,'お客様のカードを照合します')]").click()
-time.sleep(3)
+target = driver.find_element(By.XPATH,"//button[contains(text(),'お客様のカードを照合します')]").click()
+# target = driver.find_element(By.XPATH,"//*[text()='お客様のカードを照合します']").click()
+time.sleep(5)
 # todo: 確定ボタンを押す処理を書く（テストでも購入してしまうので慎重に）
 
 # response = requests.get(url)
