@@ -8,7 +8,8 @@ driver = webdriver.Chrome(executable_path='/Users/sasakiryou/Downloads/chromedri
 driver.get("https://www.amazon.co.jp/b?ie=UTF8&node=8443136051")
 # カテゴリから支援先を選ぶ（ランダムに選択）
 # todo: 現在は１ページ目しか取得出来ないので、２ページ目以降も取得出来るようにする
-categoryNum = random.randint(0, 2)
+# todo: 動物のページが取得出来ないのでできるようにする
+categoryNum = random.randint(0, 1)
 target = driver.find_element(By.ID,f"a-autoid-{categoryNum}-announce")
 target.click()
 length = len(driver.find_elements(By.TAG_NAME,"h5"))
@@ -17,14 +18,21 @@ target = driver.find_elements(By.TAG_NAME,"h5")[id]
 target.find_element(By.XPATH,"../a").click()
 time.sleep(3)
 # ほしい物リストのページに遷移
-for element in driver.find_elements(By.CLASS_NAME,"a-price-whole"):
+list = driver.find_elements(By.CLASS_NAME,"a-price-whole")
+totalPrice = 4000
+for index,element in enumerate(list):
   price = int(element.text.replace(",", ""))
+  target = driver.find_elements(By.PARTIAL_LINK_TEXT,"カートに入れる")
+  length = len(target)
   if(price < 4000): 
-    target = driver.find_element(By.PARTIAL_LINK_TEXT,"カートに入れる").click()
+    id = index
+    totalPrice -= price
+    target[id].click()
     time.sleep(3)
     break
-driver.find_element(By.ID,"sc-buy-box-ptc-button").click()
 time.sleep(3)
+exit()
+driver.find_element(By.ID,"sc-buy-box-ptc-button").click()
 url = driver.current_url
 mail = "axshot@yahoo.co.jp"
 target = driver.find_element(By.ID,"ap_email").send_keys(mail)
