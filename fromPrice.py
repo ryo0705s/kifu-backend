@@ -12,39 +12,65 @@ driver.get("https://www.amazon.co.jp/b?ie=UTF8&node=8443136051")
 categoryNum = random.randint(0, 1)
 target = driver.find_element(By.ID,f"a-autoid-{categoryNum}-announce")
 target.click()
-length = len(driver.find_elements(By.TAG_NAME,"h5"))
+# 選択したカテゴリのページに遷移
+sightList = driver.find_elements(By.TAG_NAME,"h5")
+length = len(sightList)
 id = random.randint(0, length - 1)
-target = driver.find_elements(By.TAG_NAME,"h5")[id]
-target.find_element(By.XPATH,"../a").click()
-time.sleep(3)
-# ほしい物リストのページに遷移
-list = driver.find_elements(By.CLASS_NAME,"a-price-whole")
-totalPrice = 4000
-for index,element in enumerate(list):
-  list = driver.find_elements(By.CLASS_NAME,"a-price-whole")
-  element = list[index]
-  price = int(element.text.replace(",", ""))
-  target = driver.find_elements(By.PARTIAL_LINK_TEXT,"カートに入れる")
-  nextPrice = 0
-  if(len(list) > 0 and index + 1 <= len(list) - 1):
-    nextPrice = int(list[index+1].text.replace(",", ""))
-  if(totalPrice > 0 and totalPrice > price): 
-    id = index
-    target[id].click()
-    totalPrice -= price
-    if(totalPrice < 0 or totalPrice < nextPrice):
-      print("予算に達しました1")
-      break
-    print(totalPrice,"totalPrice")
-    time.sleep(3)
-  # 予算に達していない場合前のページに戻り、次の商品を選択する
+flag = False
+for i,elm in enumerate(sightList):
+  index = 0
+  print(i,"回目のループ")
+  sightList = driver.find_elements(By.TAG_NAME,"h5")
+  length = len(sightList)
+  print(length,"length")
+  id = random.randint(0, length - 1)
+  target = sightList[id]
+  target.find_element(By.XPATH,"../a").click()
+  time.sleep(3)
+  # ほしい物リストのページに遷移
+  itemList = driver.find_elements(By.CLASS_NAME,"a-price-whole")
+  totalPrice = 2000
+  if(itemList == []):
+    print("商品がありませんでした")
+    flag = True
+    i+=1
     driver.back()
-  else:
-    print("todo:違うページを見に行く実装をする")
-    exit()
-  index += 1
-  print(id,"番目の商品をカートに入れました")
-time.sleep(3)
+  # print(itemList,"itemList")
+  for index,element in enumerate(itemList):
+    itemList = driver.find_elements(By.CLASS_NAME,"a-price-whole")
+    print(index,"index")
+    element = itemList[index]
+    price = int(element.text.replace(",", ""))
+    target = driver.find_elements(By.PARTIAL_LINK_TEXT,"カートに入れる")
+    nextPrice = 0
+    # ほしい物リストが2つ以上ある場合は、次の商品の価格を取得する
+    if(len(itemList) > 0 and index + 1 <= len(itemList) - 1):
+      nextPrice = int(itemList[index+1].text.replace(",", ""))
+    # 予算があり、商品の価格が予算を超えていない場合はカートに入れる
+    if(totalPrice > 0 and totalPrice > price): 
+      id = index
+      target[id].click()
+      totalPrice -= price
+      # 予算がない場合か、次の商品の価格が予算を超えている場合はカートに入れる処理を終了する
+      if(totalPrice < 0 or totalPrice < nextPrice):
+        flag=False
+        print("予算に達しました1")
+        break
+      print(totalPrice,"totalPrice")
+      time.sleep(3)
+    # 予算に達していない場合前のページに戻り、次の商品を選択する
+      driver.back()
+    else:
+      print("todo:違うページを見に行く実装をする")
+      flag = True
+      driver.back()
+      time.sleep(3)
+      break
+    index += 1
+    print(id,"番目の商品をカートに入れました")
+  time.sleep(3)
+  if(flag==False):
+    break
 driver.find_element(By.ID,"sc-buy-box-ptc-button").click()
 url = driver.current_url
 mail = "axshot@yahoo.co.jp"
