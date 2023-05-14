@@ -21,17 +21,30 @@ time.sleep(3)
 list = driver.find_elements(By.CLASS_NAME,"a-price-whole")
 totalPrice = 4000
 for index,element in enumerate(list):
+  list = driver.find_elements(By.CLASS_NAME,"a-price-whole")
+  element = list[index]
   price = int(element.text.replace(",", ""))
   target = driver.find_elements(By.PARTIAL_LINK_TEXT,"カートに入れる")
-  length = len(target)
-  if(price < 4000): 
+  nextPrice = 0
+  if(len(list) > 0 and index + 1 <= len(list) - 1):
+    nextPrice = int(list[index+1].text.replace(",", ""))
+  if(totalPrice > 0 and totalPrice > price): 
     id = index
-    totalPrice -= price
     target[id].click()
+    totalPrice -= price
+    if(totalPrice < 0 or totalPrice < nextPrice):
+      print("予算に達しました1")
+      break
+    print(totalPrice,"totalPrice")
     time.sleep(3)
-    break
+  # 予算に達していない場合前のページに戻り、次の商品を選択する
+    driver.back()
+  else:
+    print("todo:違うページを見に行く実装をする")
+    exit()
+  index += 1
+  print(id,"番目の商品をカートに入れました")
 time.sleep(3)
-exit()
 driver.find_element(By.ID,"sc-buy-box-ptc-button").click()
 url = driver.current_url
 mail = "axshot@yahoo.co.jp"
