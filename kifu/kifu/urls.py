@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from kifu_app import views as views
+from django.urls import include
+# from kifu_app import views as views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('views/', views.index, name='index')
+    path('',include('kifu_app.urls'))
+    # path('views/', views.index, name='index')
 ]
