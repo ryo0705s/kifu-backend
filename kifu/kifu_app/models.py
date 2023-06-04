@@ -9,3 +9,11 @@ class kifu(models.Model):
   
   def __str__(self):
     return self.title
+
+class donation(models.Model):
+  title = models.CharField(default="hoge",max_length=100)
+  description = models.CharField(default="hoge",max_length=300)
+  donation_amount = models.IntegerField()
+  
+  def __str__(self):
+    return self.title
