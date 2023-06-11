@@ -3,6 +3,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 import time
 import random
+import requests
 
 driver = webdriver.Chrome(executable_path='/Users/sasakiryou/Downloads/chromedriver')
 driver.get("https://www.amazon.co.jp/b?ie=UTF8&node=8443136051")
@@ -17,7 +18,10 @@ sightList = driver.find_elements(By.TAG_NAME,"h5")
 length = len(sightList)
 id = random.randint(0, length - 1)
 goToPreviousPage = False
-totalPrice = 2000
+response = requests.get("http://127.0.0.1:8000/api/get/1").json()["donation_amount"]
+# print(response.json()["donation_amount"],"response")
+totalPrice = response
+print(totalPrice,"totalPrice")
 # 施設一覧を取得する処理
 for i,elm in enumerate(sightList):
   index = 0

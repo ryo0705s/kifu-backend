@@ -10,3 +10,7 @@ class api(RetrieveAPIView):
 class create(CreateAPIView):
   queryset = donation.objects.all()
   serializer_class = kifuSerializer
+  
+class get(RetrieveAPIView):
+  queryset = donation.objects.all()
+  serializer_class = kifuSerializer
