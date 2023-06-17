@@ -18,10 +18,10 @@ sightList = driver.find_elements(By.TAG_NAME,"h5")
 length = len(sightList)
 id = random.randint(0, length - 1)
 goToPreviousPage = False
-response = requests.get("http://127.0.0.1:8000/api/get/1").json()["donation_amount"]
-# print(response.json()["donation_amount"],"response")
-totalPrice = response
-print(totalPrice,"totalPrice")
+response = requests.get("http://127.0.0.1:8000/api/get")
+sortedList = sorted(response.json(),key=lambda x: x['id'], reverse=True)
+totalPrice = sortedList[0]["donation_amount"]
+# print(totalPrice,"totalPrice")
 # 施設一覧を取得する処理
 for i,elm in enumerate(sightList):
   index = 0
