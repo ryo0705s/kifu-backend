@@ -6,11 +6,11 @@ class user(models.Model):
   total_donation_amounts = models.IntegerField()
   
   def __str__(self):
-    return self.title
+    return self.id
 
 class donation(models.Model):
   donation_amount = models.IntegerField()
   user = models.ForeignKey(user, on_delete=models.CASCADE)
   
   def __str__(self):
-    return self.title
+    return self.id
