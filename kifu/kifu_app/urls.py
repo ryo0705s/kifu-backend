@@ -2,8 +2,10 @@ from django.urls import path
 from . import apis
 
 urlpatterns = [
-  path('api/<int:pk>', apis.api.as_view(), name='api'),
-  path('api/create', apis.create.as_view(), name='create'),
-  path('api/get', apis.getList.as_view(), name='getList'),
-  path('api/get/<int:pk>', apis.get.as_view(), name='get'),
+  path('api/createDonation', apis.createDonation.as_view(), name='createDonation'),
+  path('api/getDonations', apis.getDonationList.as_view(), name='getDonationList'),
+  path('api/getDonations/<int:pk>', apis.getDonation.as_view(), name='getDonation'),
+  path('api/createUser', apis.createUser.as_view(), name='createUser'),
+  path('api/getUsers', apis.getUserList.as_view(), name='getUserList'),
+  path('api/getUsers/<int:pk>', apis.getUser.as_view(), name='getUser'),
 ]

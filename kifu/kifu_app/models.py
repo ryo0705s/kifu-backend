@@ -1,19 +1,16 @@
 from django.db import models
 
-class kifu(models.Model):
-  title = models.CharField(max_length=100)
-  description = models.CharField(max_length=300)
+class user(models.Model):
   mail = models.CharField(max_length=100)
   password = models.CharField(max_length=100)
-  donation_amount = models.IntegerField()
+  total_donation_amounts = models.IntegerField()
   
   def __str__(self):
     return self.title
 
 class donation(models.Model):
-  title = models.CharField(default="hoge",max_length=100)
-  description = models.CharField(default="hoge",max_length=300)
   donation_amount = models.IntegerField()
+  user = models.ForeignKey(user, on_delete=models.CASCADE)
   
   def __str__(self):
     return self.title

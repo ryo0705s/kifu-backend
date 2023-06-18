@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import kifu, donation
+from .models import user, donation
 
 class kifuSerializer(serializers.ModelSerializer):
   class Meta:
-    model = kifu
-    fields = ['id', 'title', 'description', 'mail', 'password', 'donation_amount']
+    model = user
+    fields = ['id', 'mail', 'password', 'total_donation_amounts']
     model = donation
-    fields = ['id', 'title', 'description', 'donation_amount']
+    fields = ['id', 'user','donation_amount']

@@ -21,7 +21,7 @@ goToPreviousPage = False
 response = requests.get("http://127.0.0.1:8000/api/get")
 sortedList = sorted(response.json(),key=lambda x: x['id'], reverse=True)
 totalPrice = sortedList[0]["donation_amount"]
-# print(totalPrice,"totalPrice")
+print(totalPrice,"totalPrice")
 # 施設一覧を取得する処理
 for i,elm in enumerate(sightList):
   index = 0
