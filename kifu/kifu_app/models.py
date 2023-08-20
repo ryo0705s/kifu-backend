@@ -6,7 +6,7 @@ class user(models.Model):
   total_donation_amounts = models.IntegerField()
   
   def __str__(self):
-    return self.id
+    return self.mail
 
 class donation(models.Model):
   donation_amount = models.IntegerField()
