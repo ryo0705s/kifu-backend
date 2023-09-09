@@ -6,7 +6,14 @@ from rest_framework.generics import ListAPIView
 from .serializers import UserSerializer,DonationSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-  
+
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from rest_auth.registration.views import SocialLoginView
+
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from django.utils.translation import gettext_lazy as _
+
 class createDonation(CreateAPIView):
   queryset = donation.objects.all()
   serializer_class = DonationSerializer
@@ -41,3 +48,13 @@ class getUserList(ListAPIView):
   #   if userpassword is not None:
   #     queryset = queryset.filter(password=userpassword)
   #   return queryset
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return
+
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
+    callback_url = 'http://127.0.0.1/callback'
+    client_class = OAuth2Client
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)

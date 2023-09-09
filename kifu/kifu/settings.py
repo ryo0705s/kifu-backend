@@ -9,12 +9,13 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from django.utils.translation import gettext_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -40,6 +41,14 @@ INSTALLED_APPS = [
     'kifu_app',
     'rest_framework',
     'corsheaders',
+    'django.contrib.sites',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
 ]
 
 MIDDLEWARE = [
@@ -58,7 +67,7 @@ ROOT_URLCONF = 'kifu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,7 +89,7 @@ WSGI_APPLICATION = 'kifu.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -129,3 +138,46 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000"
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+# 1
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = False
+  
+# 2
+SITE_ID = 1
+  
+# 3
+REST_SESSION_LOGIN = False
+CORS_ORIGIN_ALLOW_ALL = True
+  
+# 4
+ACCOUNT_EMAIL_VARIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+  
+# 5
+REST_USE_JWT = True
+JWT_AUTH = {
+    'JWT_VERIFY_EXPIRATION': False,
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LANGUAGE_CODE = 'ja'
+TIME_ZONE = 'Asia/Tokyo'
+
+ALLOWED_HOSTS = ['*']
