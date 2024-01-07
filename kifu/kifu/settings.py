@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from django.utils.translation import gettext_lazy
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.sites',
     'rest_framework.authtoken',
-    'rest_auth',
+    'dj_rest_auth',
     'rest_auth.registration',
     'allauth',
     'allauth.account',
@@ -149,30 +150,23 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication', 
+        
     )
+}   
+
+REST_AUTH = {
+    'USE_JWT' : True,
+    'JWT_AUTH_HTTPONLY': False,
 }
 
-# 1
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_USERNAME_REQUIRED = False
-  
-# 2
-SITE_ID = 1
-  
-# 3
-REST_SESSION_LOGIN = False
-CORS_ORIGIN_ALLOW_ALL = True
-  
-# 4
-ACCOUNT_EMAIL_VARIFICATION = 'mandatory'
-ACCOUNT_EMAIL_REQUIRED = True
-  
-# 5
-REST_USE_JWT = True
-JWT_AUTH = {
-    'JWT_VERIFY_EXPIRATION': False,
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("JWT",),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'UPDATE_LAST_LOGIN': True,
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
