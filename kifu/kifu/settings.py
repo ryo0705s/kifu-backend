@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google'
+    'rest_auth',
+    'django_filters',
+    'django_otp',
 ]
 
 MIDDLEWARE = [
@@ -58,9 +60,11 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "corsheaders.middleware.CorsMiddleware",
+    # 'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'kifu.urls'
@@ -81,7 +85,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'kifu.wsgi.application'
+# WSGI_APPLICATION = 'kifu.wsgi.application'
 
 
 # Database
@@ -162,11 +166,11 @@ REST_AUTH = {
 }
 
 SIMPLE_JWT = {
-    "AUTH_HEADER_TYPES": ("JWT",),
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=15),
+    # "AUTH_HEADER_TYPES": ("JWT",),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=30),
-    'ROTATE_REFRESH_TOKENS': True,
-    'UPDATE_LAST_LOGIN': True,
+    # 'ROTATE_REFRESH_TOKENS': True,
+    # 'UPDATE_LAST_LOGIN': True,
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
